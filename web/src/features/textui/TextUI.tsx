@@ -7,6 +7,7 @@ import ScaleFade from '../../transitions/ScaleFade';
 import remarkGfm from 'remark-gfm';
 import type { TextUiProps, TextUiPosition } from '../../typings';
 import MarkdownComponents from '../../config/MarkdownComponents';
+import { globalClasses } from '../../theme';
 
 const useStyles = createStyles((theme, params: { position?: TextUiPosition }) => ({
   wrapper: {
@@ -24,10 +25,13 @@ const useStyles = createStyles((theme, params: { position?: TextUiPosition }) =>
     margin: 8,
     backgroundColor: theme.colors.dark[6],
     color: theme.colors.dark[0],
-    fontFamily: 'Roboto',
+    fontFamily: 'Rajdhani',
     borderRadius: theme.radius.sm,
     boxShadow: theme.shadows.sm,
   },
+  label: {
+    fontWeight: 600
+  }
 }));
 
 const TextUI: React.FC = () => {
@@ -37,6 +41,7 @@ const TextUI: React.FC = () => {
   });
   const [visible, setVisible] = React.useState(false);
   const { classes } = useStyles({ position: data.position });
+  const globalClass = globalClasses().classes;
 
   useNuiEvent<TextUiProps>('textUi', (data) => {
     if (!data.position) data.position = 'right-center'; // Default right position
@@ -50,10 +55,10 @@ const TextUI: React.FC = () => {
     <>
       <Box className={classes.wrapper}>
         <ScaleFade visible={visible}>
-          <Box style={data.style} className={classes.container}>
+          <Box style={data.style} className={classes.container+" "+globalClass.container}>
             <Group spacing={12}>
-              {data.icon && <FontAwesomeIcon icon={data.icon} fixedWidth size="lg" style={{ color: data.iconColor }} />}
-              <ReactMarkdown components={MarkdownComponents} remarkPlugins={[remarkGfm]}>
+              {data.icon && <FontAwesomeIcon icon={data.icon} fixedWidth size="lg" style={{ color: data.iconColor || '#e7b52f' }} />}
+              <ReactMarkdown components={MarkdownComponents} remarkPlugins={[remarkGfm]} className={classes.label+" "+globalClass.colorSecundary}>
                 {data.text}
               </ReactMarkdown>
             </Group>

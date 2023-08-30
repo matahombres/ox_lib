@@ -6,6 +6,7 @@ import { fetchNui } from '../../../../utils/fetchNui';
 import { isIconUrl } from '../../../../utils/isIconUrl';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import MarkdownComponents from '../../../../config/MarkdownComponents';
+import { globalClasses } from '../../../../theme';
 
 const openMenu = (id: string | undefined) => {
   fetchNui<ContextMenuProps>('openContext', { id: id, back: false });
@@ -17,7 +18,7 @@ const clickContext = (id: string) => {
 
 const useStyles = createStyles((theme, params: { disabled?: boolean }) => ({
   inner: {
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
   label: {
     width: '100%',
@@ -28,6 +29,15 @@ const useStyles = createStyles((theme, params: { disabled?: boolean }) => ({
     height: 'fit-content',
     width: '100%',
     padding: 10,
+    ":hover":{
+      background:'rgba(41,17,23,0.92)'
+    },
+    ":disabled":{
+      opacity:0.7,
+      background: 'rgba(41,17,23,0.82)',
+      border: '2px solid #9a322f',
+      boxShadow: '0 0 8px 2px #9a322f',
+    }
   },
   iconImage: {
     maxWidth: '25px',
@@ -75,6 +85,7 @@ const ContextButton: React.FC<{
   const button = option[1];
   const buttonKey = option[0];
   const { classes } = useStyles({ disabled: button.disabled });
+  const globalClass = globalClasses().classes;
 
   return (
     <>
@@ -88,7 +99,7 @@ const ContextButton: React.FC<{
             classNames={{ inner: classes.inner, label: classes.label }}
             onClick={() => (!button.disabled ? (button.menu ? openMenu(button.menu) : clickContext(buttonKey)) : null)}
             variant="default"
-            className={classes.button}
+            className={classes.button+" "+globalClass.container}
             disabled={button.disabled}
           >
             <Group position="apart" w="100%" noWrap>
@@ -103,44 +114,45 @@ const ContextButton: React.FC<{
                           icon={button.icon as IconProp}
                           fixedWidth
                           size="lg"
+                          className={globalClass.colorTerciary}
                           style={{ color: button.iconColor }}
                         />
                       )}
                     </Stack>
                   )}
-                  <Text className={classes.buttonTitleText}>
+                  <Text className={classes.buttonTitleText+" "+globalClass.colorPrimary}>
                     <ReactMarkdown components={MarkdownComponents}>{button.title || buttonKey}</ReactMarkdown>
                   </Text>
                 </Group>
                 {button.description && (
-                  <Text className={classes.description}>
+                  <Text className={classes.description+" "+globalClass.colorSecundary}>
                     <ReactMarkdown components={MarkdownComponents}>{button.description}</ReactMarkdown>
                   </Text>
                 )}
                 {button.progress !== undefined && (
-                  <Progress value={button.progress} size="sm" color={button.colorScheme || 'dark.3'} />
+                  <Progress value={button.progress} size="sm" color={button.colorScheme || '#e7b52f' || 'dark.3'} />
                 )}
               </Stack>
               {(button.menu || button.arrow) && button.arrow !== false && (
                 <Stack className={classes.buttonArrowContainer}>
-                  <FontAwesomeIcon icon="chevron-right" fixedWidth />
+                  <FontAwesomeIcon icon="chevron-right" fixedWidth className={globalClass.colorSecundary} />
                 </Stack>
               )}
             </Group>
           </Button>
         </HoverCard.Target>
-        <HoverCard.Dropdown className={classes.dropdown}>
+        <HoverCard.Dropdown className={classes.dropdown+" "+globalClass.container}>
           {button.image && <Image src={button.image} />}
           {Array.isArray(button.metadata) ? (
             button.metadata.map(
               (metadata: string | { label: string; value?: any; progress?: number }, index: number) => (
                 <>
-                  <Text key={`context-metadata-${index}`}>
+                  <Text key={`context-metadata-${index}`} className={globalClass.colorSecundary}>
                     {typeof metadata === 'string' ? `${metadata}` : `${metadata.label}: ${metadata?.value ?? ''}`}
                   </Text>
 
                   {typeof metadata === 'object' && metadata.progress !== undefined && (
-                    <Progress value={metadata.progress} size="sm" color={button.colorScheme || 'dark.3'} />
+                    <Progress value={metadata.progress} size="sm" color={button.colorScheme || '#e7b52f' || 'dark.3'} />
                   )}
                 </>
               )

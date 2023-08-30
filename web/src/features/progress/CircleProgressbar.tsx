@@ -4,6 +4,7 @@ import { useNuiEvent } from '../../hooks/useNuiEvent';
 import { fetchNui } from '../../utils/fetchNui';
 import ScaleFade from '../../transitions/ScaleFade';
 import type { CircleProgressbarProps } from '../../typings';
+import { globalClasses } from '../../theme';
 
 // 33.5 is the r of the circle
 const progressCircle = keyframes({
@@ -23,7 +24,8 @@ const useStyles = createStyles((theme, params: { position: 'middle' | 'bottom'; 
   },
   progress: {
     '> svg > circle:nth-child(1)': {
-      stroke: theme.colors.dark[5],
+      //stroke: theme.colors.dark[5],
+      stroke:'rgba(41,17,23,0.82)'
     },
     // Scuffed way of grabbing the first section and animating it
     '> svg > circle:nth-child(2)': {
@@ -34,15 +36,22 @@ const useStyles = createStyles((theme, params: { position: 'middle' | 'bottom'; 
   },
   value: {
     textAlign: 'center',
-    fontFamily: 'roboto-mono',
-    textShadow: theme.shadows.sm,
-    color: theme.colors.gray[3],
+    fontFamily: 'Rajdhani',
+    //textShadow: theme.shadows.sm,
+    //color: theme.colors.gray[3],
+    color: '#2abdc7',
+    textShadow: '-1.5px 1.5px 3px #2abdc779',
+    fontWeight:600
   },
   label: {
     textAlign: 'center',
-    textShadow: theme.shadows.sm,
-    color: theme.colors.gray[3],
+    //textShadow: theme.shadows.sm,
+    //color: theme.colors.gray[3],
     height: 25,
+    color: '#2abdc7',
+    textShadow: '-1.5px 1.5px 3px #2abdc779',
+    fontWeight:600,
+    textTransform:'uppercase'
   },
   wrapper: {
     marginTop: params.position === 'middle' ? 25 : undefined,
@@ -88,7 +97,7 @@ const CircleProgressbar: React.FC = () => {
             <RingProgress
               size={90}
               thickness={7}
-              sections={[{ value: 0, color: theme.primaryColor }]}
+              sections={[{ value: 0, color: '#ff4e46' }]}
               onAnimationEnd={() => setVisible(false)}
               className={classes.progress}
               label={<Text className={classes.value}>{value}%</Text>}

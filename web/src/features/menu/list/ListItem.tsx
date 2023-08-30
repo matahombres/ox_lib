@@ -6,6 +6,7 @@ import type { MenuItem } from '../../../typings';
 import { createStyles } from '@mantine/core';
 import { isIconUrl } from '../../../utils/isIconUrl';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { globalClasses } from '../../../theme';
 
 interface Props {
   item: MenuItem;
@@ -16,13 +17,15 @@ interface Props {
 
 const useStyles = createStyles((theme, params: { iconColor?: string }) => ({
   buttonContainer: {
-    backgroundColor: theme.colors.dark[6],
-    borderRadius: theme.radius.md,
+    //backgroundColor: theme.colors.dark[6],
+    backgroundColor: 'rgba(41,17,23,0.92)',
+    //borderRadius: theme.radius.md,
+    border: '2px solid transparent',
+    boxShadow: '0 0 5px 0px #9a322f',
     padding: 2,
     height: 60,
     scrollMargin: 8,
     '&:focus': {
-      backgroundColor: theme.colors.dark[4],
       outline: 'none',
     },
   },
@@ -42,7 +45,7 @@ const useStyles = createStyles((theme, params: { iconColor?: string }) => ({
   },
   icon: {
     fontSize: 24,
-    color: params.iconColor || theme.colors.dark[2],
+    //color: params.iconColor || theme.colors.dark[2],
   },
   label: {
     color: theme.colors.dark[2],
@@ -52,7 +55,7 @@ const useStyles = createStyles((theme, params: { iconColor?: string }) => ({
   },
   chevronIcon: {
     fontSize: 14,
-    color: theme.colors.dark[2],
+    //color: theme.colors.dark[2],
   },
   scrollIndexValue: {
     color: theme.colors.dark[2],
@@ -71,6 +74,7 @@ const useStyles = createStyles((theme, params: { iconColor?: string }) => ({
 
 const ListItem = forwardRef<Array<HTMLDivElement | null>, Props>(({ item, index, scrollIndex, checked }, ref) => {
   const { classes } = useStyles({ iconColor: item.iconColor });
+  const globalClass = globalClasses().classes;
 
   return (
     <Box
@@ -89,15 +93,15 @@ const ListItem = forwardRef<Array<HTMLDivElement | null>, Props>(({ item, index,
             {typeof item.icon === 'string' && isIconUrl(item.icon) ? (
               <img src={item.icon} alt="Missing image" className={classes.iconImage} />
             ) : (
-              <FontAwesomeIcon icon={item.icon as IconProp} className={classes.icon} fixedWidth />
+              <FontAwesomeIcon icon={item.icon as IconProp} className={classes.icon+" "+globalClass.colorTerciary} fixedWidth />
             )}
           </Box>
         )}
         {Array.isArray(item.values) ? (
           <Group position="apart" w="100%">
             <Stack spacing={0} justify="space-between">
-              <Text className={classes.label}>{item.label}</Text>
-              <Text>
+              <Text className={classes.label+" "+globalClass.colorTerciary} style={{fontWeight:600, textTransform:'uppercase'}}>{item.label}</Text>
+              <Text className={globalClass.colorPrimary}>
                 {typeof item.values[scrollIndex] === 'object'
                   ? // @ts-ignore for some reason even checking the type TS still thinks it's a string
                     item.values[scrollIndex].label
@@ -105,29 +109,29 @@ const ListItem = forwardRef<Array<HTMLDivElement | null>, Props>(({ item, index,
               </Text>
             </Stack>
             <Group spacing={1} position="center">
-              <FontAwesomeIcon icon="chevron-left" className={classes.chevronIcon} />
-              <Text className={classes.scrollIndexValue}>
+              <FontAwesomeIcon icon="chevron-left" className={classes.chevronIcon+" "+globalClass.colorSecundary} />
+              <Text className={classes.scrollIndexValue+" "+globalClass.colorSecundary}>
                 {scrollIndex + 1}/{item.values.length}
               </Text>
-              <FontAwesomeIcon icon="chevron-right" className={classes.chevronIcon} />
+              <FontAwesomeIcon icon="chevron-right" className={classes.chevronIcon+" "+globalClass.colorSecundary} />
             </Group>
           </Group>
         ) : item.checked !== undefined ? (
           <Group position="apart" w="100%">
-            <Text>{item.label}</Text>
+            <Text className={globalClass.colorPrimary}>{item.label}</Text>
             <CustomCheckbox checked={checked}></CustomCheckbox>
           </Group>
         ) : item.progress !== undefined ? (
           <Stack className={classes.progressStack} spacing={0}>
-            <Text className={classes.progressLabel}>{item.label}</Text>
+            <Text className={classes.progressLabel+" "+globalClass.colorPrimary}>{item.label}</Text>
             <Progress
               value={item.progress}
-              color={item.colorScheme || 'dark.0'}
+              color={item.colorScheme || '#e7b52f' || 'dark.0'}
               styles={(theme) => ({ root: { backgroundColor: theme.colors.dark[3] } })}
             />
           </Stack>
         ) : (
-          <Text>{item.label}</Text>
+          <Text className={globalClass.colorPrimary}>{item.label}</Text>
         )}
       </Group>
     </Box>

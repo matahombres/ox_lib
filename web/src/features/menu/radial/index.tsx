@@ -15,29 +15,40 @@ const useStyles = createStyles((theme) => ({
     transform: 'translate(-50%, -50%)',
   },
   sector: {
-    fill: theme.colors.dark[6],
-    color: theme.colors.dark[0],
+    //fill: theme.colors.dark[6],
+    fill: 'rgba(41,17,23,0.82)',
+    //color: theme.colors.dark[0],
+    color: 'white',
+    textShadow: '-1.5px 1.5px 3px #ffffff79',
 
     '&:hover': {
-      fill: theme.fn.primaryColor(),
+      fill: '#ff4e46',
+      //fill: theme.fn.primaryColor(),
       '> g > text, > g > svg > path': {
-        fill: '#fff',
+        //fill: '#fff',
+        //fill: '#2abdc7'
       },
     },
     '> g > text': {
-      fill: theme.colors.dark[0],
+      //fill: theme.colors.dark[0],
+      fill: '#fff',
+      fontWeight: 600,
+      textShadow: '-1.5px 1.5px 3px #ffffff79',
     },
   },
   backgroundCircle: {
-    fill: theme.colors.dark[6],
+    fill:'rgba(41,17,23,0.82)',
+    //fill: theme.colors.dark[6],
   },
   centerCircle: {
-    fill: theme.fn.primaryColor(),
+    //fill: theme.fn.primaryColor(),
+    fill: '#ff4e46',
     color: '#fff',
     stroke: theme.colors.dark[6],
     strokeWidth: 4,
     '&:hover': {
-      fill: theme.colors[theme.primaryColor][theme.fn.primaryShade() - 1],
+      fill: '#ff665f',
+      //fill: theme.colors[theme.primaryColor][theme.fn.primaryShade() - 1],
     },
   },
   centerIconContainer: {
