@@ -4,6 +4,7 @@ import Indicator from './indicator';
 import { fetchNui } from '../../utils/fetchNui';
 import { Box, createStyles } from '@mantine/core';
 import type { SkillCheckProps, GameDifficulty } from '../../typings';
+import { globalClasses } from '../../theme';
 
 export const circleCircumference = 2 * 50 * Math.PI;
 
@@ -24,16 +25,18 @@ const useStyles = createStyles((theme) => ({
   },
   track: {
     fill: 'transparent',
-    stroke: theme.colors.dark[5],
+    //stroke: theme.colors.dark[5],
+    stroke: 'rgba(41,17,23,0.82)',
     strokeWidth: 8,
   },
   skillArea: {
     fill: 'transparent',
-    stroke: theme.fn.primaryColor(),
+    //stroke: theme.fn.primaryColor(),
+    stroke: '#ff4e46',
     strokeWidth: 8,
   },
   indicator: {
-    stroke: 'red',
+    stroke: '#e7b52f',
     strokeWidth: 16,
     fill: 'transparent',
   },
@@ -42,18 +45,19 @@ const useStyles = createStyles((theme) => ({
     left: '50%',
     top: '50%',
     transform: 'translate(-50%, -50%)',
-    backgroundColor: theme.colors.dark[5],
-    width: 25,
-    height: 25,
+    //backgroundColor: theme.colors.dark[5],
+    width: 47,
+    height: 47,
     textAlign: 'center',
-    borderRadius: 5,
-    fontSize: 16,
-    fontWeight: 500,
+    //borderRadius: 5,
+    fontSize: 30,
+    fontWeight: 600,
   },
 }));
 
 const SkillCheck: React.FC = () => {
   const { classes } = useStyles();
+  const globalClass = globalClasses().classes;
   const [visible, setVisible] = useState(false);
   const dataRef = useRef<{ difficulty: GameDifficulty | GameDifficulty[]; inputs?: string[] } | null>(null);
   const dataIndexRef = useRef<number>(0);
@@ -145,7 +149,7 @@ const SkillCheck: React.FC = () => {
               skillCheck={skillCheck}
             />
           </svg>
-          <Box className={classes.button}>{skillCheck.key.toUpperCase()}</Box>
+          <Box className={classes.button+" "+globalClass.colorSecundary}>{skillCheck.key.toUpperCase()}</Box>
         </>
       )}
     </>

@@ -10,7 +10,8 @@ const useStyles = createStyles((theme) => ({
     width: 350,
     height: 45,
     borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.dark[5],
+    //backgroundColor: theme.colors.dark[5],
+    backgroundColor: 'rgba(41,17,23,0.82)',
     overflow: 'hidden',
   },
   wrapper: {
@@ -24,7 +25,8 @@ const useStyles = createStyles((theme) => ({
   },
   bar: {
     height: '100%',
-    backgroundColor: theme.colors[theme.primaryColor][theme.fn.primaryShade()],
+    //backgroundColor: theme.colors[theme.primaryColor][theme.fn.primaryShade()],
+    backgroundColor:'#ff4e46'
   },
   labelWrapper: {
     position: 'absolute',
@@ -40,9 +42,13 @@ const useStyles = createStyles((theme) => ({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
-    fontSize: 20,
-    color: theme.colors.gray[3],
-    textShadow: theme.shadows.sm,
+    fontSize: 18,
+    //color: theme.colors.gray[3],
+    //textShadow: theme.shadows.sm,
+    color: 'white',
+    textShadow: '-1.5px 1.5px 3px #ffffff79',
+    textTransform: 'uppercase',
+    fontWeight: 600
   },
 }));
 

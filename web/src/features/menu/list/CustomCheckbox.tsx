@@ -7,7 +7,7 @@ const useStyles = createStyles((theme) => ({
   },
   input: {
     backgroundColor: theme.colors.dark[7],
-    '&:checked': { backgroundColor: theme.colors.dark[2], borderColor: theme.colors.dark[2] },
+    '&:checked': { backgroundColor: '#2abdc7', borderColor: '#2abdc7' },
   },
   inner: {
     '> svg > path': {

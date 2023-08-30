@@ -6,6 +6,7 @@ import { Avatar, createStyles, Group, Stack, Box, Text, keyframes, Sx } from '@m
 import React from 'react';
 import type { NotificationProps } from '../../typings';
 import MarkdownComponents from '../../config/MarkdownComponents';
+import { globalClasses } from '../../theme';
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -15,24 +16,26 @@ const useStyles = createStyles((theme) => ({
     color: theme.colors.dark[0],
     padding: 12,
     borderRadius: theme.radius.sm,
-    fontFamily: 'Roboto',
+    fontFamily: 'Rajdhani',
     boxShadow: theme.shadows.sm,
   },
   title: {
-    fontWeight: 500,
+    fontWeight: 600,
     lineHeight: 'normal',
   },
   description: {
     fontSize: 12,
     color: theme.colors.dark[2],
-    fontFamily: 'Roboto',
+    fontFamily: 'Rajdhani',
     lineHeight: 'normal',
+    fontWeight: 600,
   },
   descriptionOnly: {
     fontSize: 14,
     color: theme.colors.dark[2],
-    fontFamily: 'Roboto',
+    fontFamily: 'Rajdhani',
     lineHeight: 'normal',
+    fontWeight: 600,
   },
 }));
 
@@ -105,6 +108,7 @@ const exitAnimationBottom = keyframes({
 
 const Notifications: React.FC = () => {
   const { classes } = useStyles();
+  const globalClass = globalClasses().classes;
 
   useNuiEvent<NotificationProps>('notify', (data) => {
     if (!data.title && !data.description) return;
@@ -153,7 +157,7 @@ const Notifications: React.FC = () => {
                 } 0.4s ease-in forwards`,
             ...data.style,
           }}
-          className={`${classes.container}`}
+          className={`${classes.container+" "+globalClass.container}`}
         >
           <Group noWrap spacing={12}>
             {data.icon && (
@@ -180,11 +184,11 @@ const Notifications: React.FC = () => {
               </>
             )}
             <Stack spacing={0}>
-              {data.title && <Text className={classes.title}>{data.title}</Text>}
+              {data.title && <Text className={classes.title+" "+globalClass.colorSecundary}>{data.title}</Text>}
               {data.description && (
                 <ReactMarkdown
                   components={MarkdownComponents}
-                  className={`${!data.title ? classes.descriptionOnly : classes.description} description`}
+                  className={`${(!data.title ? classes.descriptionOnly : classes.description)+" "+globalClass.colorTerciary} description`}
                 >
                   {data.description}
                 </ReactMarkdown>

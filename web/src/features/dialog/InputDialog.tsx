@@ -15,6 +15,7 @@ import DateField from './components/fields/date';
 import TextareaField from './components/fields/textarea';
 import TimeField from './components/fields/time';
 import type { InputProps } from '../../typings';
+import { globalClasses } from '../../theme';
 
 export type FormValues = {
   test: {
@@ -87,6 +88,8 @@ const InputDialog: React.FC = () => {
     fetchNui('inputData', values);
   });
 
+  const { classes } = globalClasses();
+
   return (
     <>
       <Modal
@@ -96,7 +99,13 @@ const InputDialog: React.FC = () => {
         closeOnEscape={fields.options?.allowCancel !== false}
         closeOnClickOutside={false}
         size="xs"
-        styles={{ title: { textAlign: 'center', width: '100%', fontSize: 18 } }}
+        classNames={{
+          modal: classes.container,
+          title: classes.colorSecundary
+        }}
+        styles={{ 
+          title: { textAlign: 'center', width: '100%', fontSize: 20, textTransform: 'uppercase', fontWeight:600 } ,
+        }}
         title={fields.heading}
         withCloseButton={false}
         overlayOpacity={0.5}
@@ -148,12 +157,14 @@ const InputDialog: React.FC = () => {
                 uppercase
                 variant="default"
                 onClick={handleClose}
+                className={classes.btnCancel}
                 mr={3}
                 disabled={fields.options?.allowCancel === false}
               >
                 {locale.ui.cancel}
               </Button>
-              <Button uppercase variant="light" type="submit">
+              <Button uppercase variant="light" type="submit"
+                className={classes.btnConfirm}>
                 {locale.ui.confirm}
               </Button>
             </Group>

@@ -8,6 +8,7 @@ import { fetchNui } from '../../../utils/fetchNui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import type { MenuPosition, MenuSettings } from '../../../typings';
+import { globalClasses } from '../../../theme';
 
 const useStyles = createStyles((theme, params: { position?: MenuPosition; itemCount: number; selected: number }) => ({
   tooltip: {
@@ -27,7 +28,7 @@ const useStyles = createStyles((theme, params: { position?: MenuPosition; itemCo
     right: params.position === 'top-right' || params.position === 'bottom-right' ? 1 : undefined,
     left: params.position === 'bottom-left' ? 1 : undefined,
     bottom: params.position === 'bottom-left' || params.position === 'bottom-right' ? 1 : undefined,
-    fontFamily: 'Roboto',
+    fontFamily: 'Rajdhani',
     width: 384
   },
   buttonsWrapper: {
@@ -35,12 +36,13 @@ const useStyles = createStyles((theme, params: { position?: MenuPosition; itemCo
     maxHeight: 415,
     overflow: 'hidden',
     borderRadius: params.itemCount <= 6 || params.selected === params.itemCount - 1 ? theme.radius.md : undefined,
-    backgroundColor: theme.colors.dark[8],
+    //backgroundColor: theme.colors.dark[8],
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
   },
   scrollArrow: {
-    backgroundColor: theme.colors.dark[8],
+    //backgroundColor: theme.colors.dark[8],
+    backgroundColor: 'rgba(41,17,23,0.92)',
     textAlign: 'center',
     borderBottomLeftRadius: theme.radius.md,
     borderBottomRightRadius: theme.radius.md,
@@ -65,6 +67,7 @@ const ListMenu: React.FC = () => {
   const listRefs = useRef<Array<HTMLDivElement | null>>([]);
   const firstRenderRef = useRef(false);
   const { classes } = useStyles({ position: menu.position, itemCount: menu.items.length, selected });
+  const globalClass = globalClasses().classes;
 
   const closeMenu = (ignoreFetch?: boolean, keyPressed?: string, forceClose?: boolean) => {
     if (menu.canClose === false && !forceClose) return;
@@ -216,7 +219,7 @@ const ListMenu: React.FC = () => {
           transitionDuration={0}
           classNames={{ tooltip: classes.tooltip }}
         >
-          <Box className={classes.container}>
+          <Box className={classes.container+ " "+globalClass.container}>
             <Header title={menu.title} />
             <Box className={classes.buttonsWrapper} onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => moveMenu(e)}>
               <FocusTrap active={visible}>

@@ -1,6 +1,7 @@
 import { Button, createStyles } from '@mantine/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { globalClasses } from '../../../../theme';
 
 interface Props {
   icon: IconProp;
@@ -18,6 +19,9 @@ const useStyles = createStyles((theme, params: { canClose?: boolean }) => ({
     textAlign: 'center',
     justifyContent: 'center',
     padding: 2,
+    ":hover":{
+      background:'rgba(41,17,23,0.92)'
+    }
   },
   root: {
     border: 'none',
@@ -29,16 +33,17 @@ const useStyles = createStyles((theme, params: { canClose?: boolean }) => ({
 
 const HeaderButton: React.FC<Props> = ({ icon, canClose, iconSize, handleClick }) => {
   const { classes } = useStyles({ canClose });
+  const globalClass = globalClasses().classes;
 
   return (
     <Button
       variant="default"
-      className={classes.button}
+      className={classes.button+" "+globalClass.container}
       classNames={{ label: classes.label, root: classes.root }}
       disabled={canClose === false}
       onClick={handleClick}
     >
-      <FontAwesomeIcon icon={icon} fontSize={iconSize} fixedWidth />
+      <FontAwesomeIcon icon={icon} fontSize={iconSize} fixedWidth className={globalClass.colorTerciary} />
     </Button>
   );
 };

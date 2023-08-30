@@ -7,6 +7,7 @@ import { useLocales } from '../../providers/LocaleProvider';
 import remarkGfm from 'remark-gfm';
 import type { AlertProps } from '../../typings';
 import MarkdownComponents from '../../config/MarkdownComponents';
+import { globalClasses } from '../../theme';
 
 const AlertDialog: React.FC = () => {
   const { locale } = useLocales();
@@ -31,6 +32,8 @@ const AlertDialog: React.FC = () => {
     setOpened(false);
   });
 
+  const { classes } = globalClasses();
+
   return (
     <>
       <Modal
@@ -42,6 +45,13 @@ const AlertDialog: React.FC = () => {
         onClose={() => {
           setOpened(false);
           closeAlert('cancel');
+        }}
+        classNames={{
+          modal: classes.container,
+          title: classes.colorSecundary
+        }}
+        styles={{ 
+          title: { fontSize: 20, textTransform: 'uppercase', fontWeight:600 } ,
         }}
         withCloseButton={false}
         overlayOpacity={0.5}
@@ -56,17 +66,19 @@ const AlertDialog: React.FC = () => {
               ...MarkdownComponents,
               img: ({ ...props }) => <img style={{ maxWidth: '100%', maxHeight: '100%' }} {...props} />,
             }}
+            className={classes.colorPrimary}
           >
             {dialogData.content}
           </ReactMarkdown>
           <Group position="right" spacing={10}>
             {dialogData.cancel && (
-              <Button uppercase variant="default" onClick={() => closeAlert('cancel')} mr={3}>
+              <Button className={classes.btnCancel} uppercase variant="default" onClick={() => closeAlert('cancel')} mr={3}>
                 {dialogData.labels?.cancel || locale.ui.cancel}
               </Button>
             )}
             <Button
               uppercase
+              className={classes.btnConfirm}
               variant={dialogData.cancel ? 'light' : 'default'}
               color={dialogData.cancel ? theme.primaryColor : undefined}
               onClick={() => closeAlert('confirm')}
