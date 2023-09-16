@@ -39,7 +39,7 @@ const AlertDialog: React.FC = () => {
     setOpened(false);
   });
 
-  const { classes } = globalClasses();
+  const globalClass = globalClasses().classes;
 
   return (
     <>
@@ -54,8 +54,8 @@ const AlertDialog: React.FC = () => {
           closeAlert('cancel');
         }}
         classNames={{
-          modal: classes.container,
-          title: classes.colorSecundary
+          modal: globalClass.container,
+          title: globalClass.colorSecundary
         }}
         styles={{ 
           title: { fontSize: 20, textTransform: 'uppercase', fontWeight:600 } ,
@@ -73,19 +73,19 @@ const AlertDialog: React.FC = () => {
               ...MarkdownComponents,
               img: ({ ...props }) => <img style={{ maxWidth: '100%', maxHeight: '100%' }} {...props} />,
             }}
-            className={classes.colorPrimary}
+            className={globalClass.colorPrimary}
           >
             {dialogData.content}
           </ReactMarkdown>
           <Group position="right" spacing={10}>
             {dialogData.cancel && (
-              <Button className={classes.btnCancel} uppercase variant="default" onClick={() => closeAlert('cancel')} mr={3}>
+              <Button className={globalClass.btnCancel} uppercase variant="default" onClick={() => closeAlert('cancel')} mr={3}>
                 {dialogData.labels?.cancel || locale.ui.cancel}
               </Button>
             )}
             <Button
               uppercase
-              className={classes.btnConfirm}
+              className={globalClass.btnConfirm}
               variant={dialogData.cancel ? 'light' : 'default'}
               color={dialogData.cancel ? theme.primaryColor : undefined}
               onClick={() => closeAlert('confirm')}
