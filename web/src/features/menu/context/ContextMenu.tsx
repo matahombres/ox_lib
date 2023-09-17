@@ -9,12 +9,13 @@ import HeaderButton from './components/HeaderButton';
 import ScaleFade from '../../../transitions/ScaleFade';
 import MarkdownComponents from '../../../config/MarkdownComponents';
 import { globalClasses } from '../../../theme';
+import React from 'react';
 
 const openMenu = (id: string | undefined) => {
   fetchNui<ContextMenuProps>('openContext', { id: id, back: true });
 };
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme, _params, getRef) => ({
   container: {
     position: 'absolute',
     top: '15%',
@@ -42,6 +43,35 @@ const useStyles = createStyles((theme) => ({
     height: 560,
     overflowY: 'scroll',
   },
+  scrollTopFeedback:{
+    ref: getRef('scrollTop'),
+    display:"none",
+    position:"absolute",
+    top: "0",
+    left: "11px",
+    width:"94%",
+    height:"4px",
+    zIndex: 99,
+    boxShadow: '0 3px 20px 15px #ff4e46',
+    background: '#ff4e46',
+    clipPath: "polygon(0 0, 100% 0, 100% 1670%, 0 1670%)"
+  },
+  scrollBottomFeedback:{
+    ref: getRef('scrollBottom'),
+    display:"none",
+    position:"absolute",
+    bottom: "-20px",
+    left: "11px",
+    width:"94%",
+    height:"4px",
+    zIndex: 99,
+    boxShadow: '0 3px 20px 15px #ff4e46',
+    background: '#ff4e46',
+    clipPath: "polygon(0 -1670%, 100% -1670%, 100% 94%, 0 94%)"
+  },
+  show:{
+    display:"block"
+  },
   buttonsFlexWrapper: {
     gap: 4,
     padding: "10px"
@@ -49,19 +79,47 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const ContextMenu: React.FC = () => {
-  const { classes } = useStyles();
+  const { classes, cx } = useStyles();
   const globalClass = globalClasses().classes;
   const [visible, setVisible] = useState(false);
   const [contextMenu, setContextMenu] = useState<ContextMenuProps>({
     title: '',
     options: { '': { description: '', metadata: [] } },
   });
+  const [activeScrollTop, setActiveScrollTop] = useState(0);
+  const [activeScrollDown, setActiveScrollDown] = useState(0);
+  const [heightFixScrollTop, setHeightFixScrollTop] = useState(0);
 
+  const refOverflow = React.createRef<HTMLDivElement>();
+  const refContent = React.createRef<HTMLDivElement>();
+  const refHeader = React.createRef<HTMLDivElement>();
+  
   const closeContext = () => {
     if (contextMenu.canClose === false) return;
     setVisible(false);
     fetchNui('closeContext');
   };
+
+  const scrollHandle = ()=>{
+    if (refOverflow == null || refContent == null){ return;}
+    let overflowHeight = refOverflow.current?.getBoundingClientRect().height;
+    let contentHeight = refContent.current?.getBoundingClientRect().height;
+    let scrollTop = refOverflow.current?.scrollTop;
+    if (overflowHeight == null || contentHeight == null || scrollTop == null){return;}
+    let dif = contentHeight - overflowHeight;
+    if(overflowHeight < contentHeight){
+      if(dif >= scrollTop){
+        setActiveScrollDown(1)
+      }else{
+        setActiveScrollDown(0)
+      }
+      if(scrollTop > 0){
+        setActiveScrollTop(1)
+      }else{
+        setActiveScrollTop(0)
+      }
+    }
+  }
 
   // Hides the context menu on ESC
   useEffect(() => {
@@ -70,6 +128,13 @@ const ContextMenu: React.FC = () => {
     const keyHandler = (e: KeyboardEvent) => {
       if (['Escape'].includes(e.code)) closeContext();
     };
+
+    //Load initial scroll
+    scrollHandle();
+    if(refHeader.current!=null){
+      let heig = refHeader.current.getBoundingClientRect().height
+      setHeightFixScrollTop(heig)
+    }
 
     window.addEventListener('keydown', keyHandler);
 
@@ -90,7 +155,7 @@ const ContextMenu: React.FC = () => {
   return (
     <Box className={classes.container}>
       <ScaleFade visible={visible}>
-        <Flex className={classes.header}>
+        <Flex className={classes.header} ref={refHeader}>
           {contextMenu.menu && (
             <HeaderButton icon="chevron-left" iconSize={16} handleClick={() => openMenu(contextMenu.menu)} />
           )}
@@ -101,12 +166,14 @@ const ContextMenu: React.FC = () => {
           </Box>
           <HeaderButton icon="xmark" canClose={contextMenu.canClose} iconSize={18} handleClick={closeContext} />
         </Flex>
-        <Box className={classes.buttonsContainer}>
-          <Stack className={classes.buttonsFlexWrapper}>
+        <Box className={classes.buttonsContainer} onScroll={scrollHandle} ref={refOverflow}>
+          <span className={cx(classes.scrollTopFeedback,{[classes.show]:activeScrollTop==1})} style={{top:heightFixScrollTop}}></span>
+          <Stack className={classes.buttonsFlexWrapper} ref={refContent}>
             {Object.entries(contextMenu.options).map((option, index) => (
               <ContextButton option={option} key={`context-item-${index}`} />
             ))}
           </Stack>
+          <span className={cx(classes.scrollBottomFeedback,{[classes.show]:activeScrollDown==1})}></span>
         </Box>
       </ScaleFade>
     </Box>
