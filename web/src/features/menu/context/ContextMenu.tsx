@@ -106,9 +106,9 @@ const ContextMenu: React.FC = () => {
     let contentHeight = refContent.current?.getBoundingClientRect().height;
     let scrollTop = refOverflow.current?.scrollTop;
     if (overflowHeight == null || contentHeight == null || scrollTop == null){return;}
-    let dif = contentHeight - overflowHeight;
+    let dif = parseInt((contentHeight - overflowHeight).toString());
     if(overflowHeight < contentHeight){
-      if(dif >= scrollTop){
+      if((dif-8) >= scrollTop){
         setActiveScrollDown(1)
       }else{
         setActiveScrollDown(0)
