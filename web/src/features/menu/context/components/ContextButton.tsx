@@ -16,7 +16,7 @@ const clickContext = (id: string) => {
   fetchNui('clickContext', id);
 };
 
-const useStyles = createStyles((theme, params: { disabled?: boolean }) => ({
+const useStyles = createStyles((theme, params: { disabled?: boolean; readOnly?: boolean }) => ({
   inner: {
     justifyContent: 'flex-start'
   },
@@ -29,15 +29,20 @@ const useStyles = createStyles((theme, params: { disabled?: boolean }) => ({
     height: 'fit-content',
     width: '100%',
     padding: 10,
-    ":hover":{
-      background:'rgba(41,17,23,0.92)'
-    },
     ":disabled":{
       opacity:0.7,
       background: 'rgba(41,17,23,0.82)',
       border: '2px solid #9a322f',
       boxShadow: '0 0 8px 2px #9a322f',
-    }
+    },
+    '&:hover': {
+      background:'rgba(41,17,23,0.92)',
+      //backgroundColor: params.readOnly ? theme.colors.dark[6] : undefined,
+      cursor: params.readOnly ? 'unset' : 'pointer',
+    },
+    '&:active': {
+      transform: params.readOnly ? 'unset' : undefined,
+    },
   },
   iconImage: {
     maxWidth: '25px',
@@ -84,8 +89,8 @@ const ContextButton: React.FC<{
 }> = ({ option }) => {
   const button = option[1];
   const buttonKey = option[0];
-  const { classes } = useStyles({ disabled: button.disabled });
   const globalClass = globalClasses().classes;
+  const { classes } = useStyles({ disabled: button.disabled, readOnly: button.readOnly });
 
   return (
     <>
@@ -96,8 +101,14 @@ const ContextButton: React.FC<{
       >
         <HoverCard.Target>
           <Button
-            classNames={{ inner: classes.inner, label: classes.label }}
-            onClick={() => (!button.disabled ? (button.menu ? openMenu(button.menu) : clickContext(buttonKey)) : null)}
+            classNames={{ inner: classes.inner, label: classes.label, root: classes.button }}
+            onClick={() =>
+              !button.disabled && !button.readOnly
+                ? button.menu
+                  ? openMenu(button.menu)
+                  : clickContext(buttonKey)
+                : null
+            }
             variant="default"
             className={classes.button+" "+globalClass.container}
             disabled={button.disabled}
